@@ -1,0 +1,6 @@
+{
+  "active_directory": true,
+  "gitlab": false,
+  "workday": false,
+  "slack": false
+}
