@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Assistant - Lifecycle AI{% endblock %}
+
+{% block container_class %}{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="header-info">
+            <h3>Lifecycle Assistant</h3>
+            <p><i class="fas fa-bolt" style="color: var(--warning); margin-right: 5px;"></i> Powered by MCP Architecture
+            </p>
+        </div>
+        <div class="header-status">
+            <span class="status-badge active" style="font-size: 0.8em; padding: 6px 12px;"><i class="fas fa-circle"
+                    style="font-size: 0.6em; margin-right: 6px;"></i> AI Online</span>
+        </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+        <div class="message bot">
+            <div class="avatar">AI</div>
+            <div class="text">Hello! I am your Employee Lifecycle Assistant. I can help with onboarding, offboarding,
+                and team transfers. How can I assist you today?</div>
+        </div>
+    </div>
+
+    <div class="chat-input-area">
+        <div class="input-wrapper">
+            <input type="text" id="user-input" placeholder="Ask me anything... (e.g., 'Onboard a new engineer')">
+            <button id="send-btn">
+                <span>Send</span>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/script.js"></script>
+{% endblock %}

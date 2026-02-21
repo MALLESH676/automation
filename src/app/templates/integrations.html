@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}Integrations - Lifecycle AI{% endblock %}
+
+{% block content %}
+<div class="page-container fadeIn">
+    <div class="header-section">
+        <h1>Ecosystem Connectors</h1>
+        <p>Manage and monitor your integrations with identity and productivity tools.</p>
+    </div>
+
+    <div class="integrations-grid">
+        <div class="integration-card glass-hover" data-service="active_directory">
+            <div class="card-header">
+                <i class="fab fa-microsoft service-icon ad"></i>
+                <div class="status-badge busy">Loading...</div>
+            </div>
+            <h3>Active Directory</h3>
+            <p>User provisioning and group membership synchronization.</p>
+            <div class="card-footer">
+                <button class="btn-secondary" onclick="toast('Configuring Active Directory...')">Configure</button>
+                <label class="switch">
+                    <input type="checkbox" class="integration-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="integration-card glass-hover" data-service="gitlab">
+            <div class="card-header">
+                <i class="fab fa-gitlab service-icon gitlab"></i>
+                <div class="status-badge busy">Loading...</div>
+            </div>
+            <h3>GitLab</h3>
+            <p>In-house code repository and group permissions.</p>
+            <div class="card-footer">
+                <button class="btn-secondary" onclick="toast('Configuring GitLab...')">Configure</button>
+                <label class="switch">
+                    <input type="checkbox" class="integration-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="integration-card glass-hover" data-service="workday">
+            <div class="card-header">
+                <i class="fas fa-briefcase service-icon workday"></i>
+                <div class="status-badge busy">Loading...</div>
+            </div>
+            <h3>Workday HRIS</h3>
+            <p>Primary source for employee data and status changes.</p>
+            <div class="card-footer">
+                <button class="btn-secondary" onclick="toast('Configuring Workday...')">Configure</button>
+                <label class="switch">
+                    <input type="checkbox" class="integration-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="integration-card" data-service="slack">
+            <div class="card-header">
+                <i class="fab fa-slack service-icon slack"></i>
+                <div class="status-badge pending">Feature-Pending</div>
+            </div>
+            <h3>Slack</h3>
+            <p>Channel invitations and employee notifications.</p>
+            <div class="card-footer">
+                <button class="btn-secondary" onclick="toast('Setting up Slack Integration...')">Setup</button>
+                <label class="switch">
+                    <input type="checkbox" class="integration-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="mcp-server-status glass">
+        <h3><i class="fas fa-server"></i> MCP Automation Node</h3>
+        <div class="node-info">
+            <div class="stat">
+                <span class="label">Status</span>
+                <span class="value success">Healthy</span>
+            </div>
+            <div class="stat">
+                <span class="label">Uptime</span>
+                <span class="value">99.9%</span>
+            </div>
+            <div class="stat">
+                <span class="label">Latency</span>
+                <span class="value">12ms</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function toast(msg) {
+        const container = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        t.className = 'glass fadeIn';
+        t.style.padding = '12px 20px';
+        t.style.marginTop = '10px';
+        t.style.color = 'white';
+        t.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+        t.style.fontSize = '0.9em';
+        t.innerText = msg;
+        container.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    async function loadStatus() {
+        const response = await fetch('/api/integrations');
+        const states = await response.json();
+
+        Object.keys(states).forEach(service => {
+            const card = document.querySelector(`[data-service="${service}"]`);
+            if (card) {
+                const toggle = card.querySelector('.integration-toggle');
+                const badge = card.querySelector('.status-badge');
+
+                toggle.checked = states[service];
+                updateBadge(badge, states[service]);
+            }
+        });
+    }
+
+    function updateBadge(badge, isActive) {
+        if (isActive) {
+            badge.innerText = 'Connected';
+            badge.className = 'status-badge active';
+        } else {
+            badge.innerText = 'Disconnected';
+            badge.className = 'status-badge busy';
+        }
+    }
+
+    document.querySelectorAll('.integration-toggle').forEach(toggle => {
+        toggle.addEventListener('change', async (e) => {
+            const card = e.target.closest('.integration-card');
+            const service = card.dataset.service;
+            const status = e.target.checked;
+
+            try {
+                const response = await fetch('/api/integrations', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ service, status })
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    updateBadge(card.querySelector('.status-badge'), status);
+                    toast(`${service.replace('_', ' ')} ${status ? 'connected' : 'disconnected'}`);
+                }
+            } catch (err) {
+                e.target.checked = !status;
+                toast('Error updating integration status');
+            }
+        });
+    });
+
+    loadStatus();
+</script>
+{% endblock %}

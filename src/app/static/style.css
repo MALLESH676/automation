@@ -1,0 +1,671 @@
+/* Global Design Tokens */
+:root {
+    --bg-color: #0f172a;
+    --sidebar-bg: #1e293b;
+    --main-bg: #0b0f19;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.4);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --glass-bg: rgba(30, 41, 59, 0.6);
+    --border-color: rgba(51, 65, 85, 0.5);
+    --success: #10b981;
+    --warning: #f59e0b;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button {
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* App Container Layout */
+.container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar - Fixed & Premium */
+.sidebar {
+    background-color: var(--sidebar-bg);
+    padding: 30px 24px;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.logo h2 {
+    margin: 0 0 50px 0;
+    background: linear-gradient(135deg, #60a5fa, #c084fc, #818cf8);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    animation: shine 5s linear infinite;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.menu-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.menu-item {
+    padding: 14px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.menu-item:hover {
+    background: rgba(59, 130, 246, 0.05);
+    color: var(--text-primary);
+    transform: translateX(4px);
+}
+
+.menu-item.active {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent);
+    box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.1);
+}
+
+.status {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--success);
+    padding: 10px;
+    font-size: 0.9em;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--success);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 0.6;
+    }
+}
+
+/* Main Content Wrapper */
+.main-content {
+    background-color: var(--main-bg);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Chat UI Improvements - Full Screen Redesign */
+.chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.chat-header {
+    padding: 30px 40px;
+    background: rgba(15, 23, 42, 0.3);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Message Styles */
+.message {
+    display: flex;
+    gap: 16px;
+    max-width: 75%;
+    align-items: flex-end;
+}
+
+.message.bot {
+    align-self: flex-start;
+}
+
+.message.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message .text {
+    padding: 18px 24px;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.message.bot .text {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+.message.user .text {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.3);
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.message.bot .avatar {
+    background: linear-gradient(135deg, #818cf8, #c084fc);
+    color: white;
+    position: relative;
+}
+
+.message.bot .avatar::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 14px;
+    background: inherit;
+    z-index: -1;
+    opacity: 0.5;
+    animation: pulse-avatar 2s infinite;
+}
+
+@keyframes pulse-avatar {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Chat Input UI */
+.chat-input-area {
+    padding: 40px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+}
+
+.input-wrapper {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    gap: 15px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    padding: 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+}
+
+.chat-input-area input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.chat-input-area button {
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: white;
+    padding: 0 35px;
+    border-radius: 16px;
+    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+}
+
+.chat-input-area button:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 30px -5px rgba(59, 130, 246, 0.5);
+}
+
+.btn-secondary {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid var(--border-color);
+    padding: 6px 16px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent);
+    color: white;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+
+
+/* Common Sub-Page Styles (Audit Logs, Integrations) */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    /* Reduced from 40px */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Reduced from 30px */
+}
+
+.header-section h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.header-section p {
+    color: var(--text-secondary);
+    margin: 10px 0 0 0;
+}
+
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+}
+
+.glass-hover {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.glass-hover:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px -10px var(--accent-glow);
+}
+
+/* Audit Logs & Filtering UI */
+.filters-container {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.search-box input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid var(--border-color);
+    padding: 12px 12px 12px 45px;
+    border-radius: 12px;
+    color: white;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: var(--accent);
+}
+
+.filter-pills {
+    display: flex;
+    gap: 10px;
+}
+
+.pill {
+    padding: 10px 20px;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 30px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-secondary);
+}
+
+.pill:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--text-primary);
+}
+
+.pill.active {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 5px 15px var(--accent-glow);
+}
+
+/* Audit Logs Timeline */
+
+.timeline-container {
+    position: relative;
+    padding-left: 50px;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent), transparent);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+    padding: 25px;
+    animation: fadeInUp 0.5s ease both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -43px;
+    top: 32px;
+    width: 14px;
+    height: 14px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent);
+}
+
+/* Integrations List (Vertical Rows) */
+.integrations-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.integration-card {
+    padding: 12px 24px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    background: #1a2333;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.integration-card:hover {
+    border-color: var(--accent);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: auto;
+    margin-bottom: 0;
+}
+
+.service-icon {
+    font-size: 1.8rem;
+    width: 32px;
+    text-align: center;
+}
+
+.integration-card h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    width: 180px;
+    flex-shrink: 0;
+}
+
+.integration-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    flex: 1;
+}
+
+.status-badge {
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    width: 120px;
+    text-align: center;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+/* Toggle Switch Match */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 22px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #334155;
+    transition: .3s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .3s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #3b82f6;
+}
+
+input:checked+.slider:before {
+    transform: translateX(22px);
+}
+
+/* MCP Automation Node Panel */
+.mcp-server-status {
+    margin-top: 20px;
+    /* Reduced from 40px */
+    padding: 20px;
+    /* Reduced from 24px */
+    background: #1a2333;
+    border-radius: 12px;
+}
+
+.mcp-server-status h3 {
+    font-size: 1.1rem;
+    margin: 0 0 16px 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.node-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+.stat .label {
+    color: var(--text-secondary);
+    margin-right: 8px;
+}
+
+.stat .value {
+    color: white;
+    font-weight: 400;
+}
+
+.stat .value.success {
+    color: #10b981;
+}
+
+/* UI Helpers */
+.fadeIn {
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Live Logs Drawer */
+.live-logs-drawer {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 400px;
+    height: 60px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.live-logs-drawer.open {
+    height: 500px;
+}
