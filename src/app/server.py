@@ -13,6 +13,9 @@ app = Flask(__name__,
 agent = AIAgent()
 orchestrator = TransferOrchestrator()
 
+# Mock Auth State (in-memory for demo)
+auth_state = {"logged_in": False, "user": None}
+
 INTEGRATIONS_FILE = "integrations.json"
 
 def load_integration_states():
@@ -120,6 +123,22 @@ def chat():
             "response": response_msg,
             "status": "FAILED"
         })
+
+@app.route('/api/auth/status', methods=['GET'])
+def auth_status():
+    return jsonify(auth_state)
+
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    auth_state["logged_in"] = True
+    auth_state["user"] = "Admin User"
+    return jsonify({"status": "success", "user": auth_state["user"]})
+
+@app.route('/api/auth/logout', methods=['POST'])
+def logout():
+    auth_state["logged_in"] = False
+    auth_state["user"] = None
+    return jsonify({"status": "success"})
 
 if __name__ == '__main__':
     # Increase recursion limit if needed for complex plans, but shouldn't be necessary here

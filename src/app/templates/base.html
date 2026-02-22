@@ -20,15 +20,40 @@
             </div>
             <div class="menu">
                 <a href="/" class="menu-link">
-                    <div class="menu-item {% if request.path == '/' %}active{% endif %}">Chat Agent</div>
+                    <div class="menu-item {% if request.path == '/' %}active{% endif %}">
+                        <i class="fas fa-comment-dots"></i> Chat Agent
+                    </div>
                 </a>
                 <a href="/audit-logs" class="menu-link">
-                    <div class="menu-item {% if request.path == '/audit-logs' %}active{% endif %}">Audit Logs</div>
+                    <div class="menu-item {% if request.path == '/audit-logs' %}active{% endif %}">
+                        <i class="fas fa-history"></i> Audit Logs
+                    </div>
                 </a>
                 <a href="/integrations" class="menu-link">
-                    <div class="menu-item {% if request.path == '/integrations' %}active{% endif %}">Integrations</div>
+                    <div class="menu-item {% if request.path == '/integrations' %}active{% endif %}">
+                        <i class="fas fa-plug"></i> Integrations
+                    </div>
                 </a>
             </div>
+
+            <!-- User Auth Section -->
+            <div class="user-section">
+                <div id="user-profile" style="display: none;">
+                    <div class="user-info">
+                        <div class="user-avatar">A</div>
+                        <span id="username">Admin</span>
+                    </div>
+                    <button class="btn-logout" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+                <div id="login-section">
+                    <button class="btn-login" id="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </div>
+            </div>
+
             <div class="status">
                 <div class="status-indicator online"></div>
                 <span>System Online</span>
@@ -41,6 +66,37 @@
         </div>
     </div>
     {% block scripts %}{% endblock %}
+    <script>
+        async function updateAuthState() {
+            const resp = await fetch('/api/auth/status');
+            const state = await resp.json();
+            const profile = document.getElementById('user-profile');
+            const loginSection = document.getElementById('login-section');
+            const username = document.getElementById('username');
+
+            if (state.logged_in) {
+                profile.style.display = 'flex';
+                loginSection.style.display = 'none';
+                username.innerText = state.user;
+            } else {
+                profile.style.display = 'none';
+                loginSection.style.display = 'block';
+            }
+        }
+
+        document.getElementById('login-btn')?.addEventListener('click', async () => {
+            const resp = await fetch('/api/auth/login', { method: 'POST' });
+            if (resp.ok) updateAuthState();
+        });
+
+        document.getElementById('logout-btn')?.addEventListener('click', async () => {
+            const resp = await fetch('/api/auth/logout', { method: 'POST' });
+            if (resp.ok) updateAuthState();
+        });
+
+        // Initial check
+        updateAuthState();
+    </script>
 </body>
 
 </html>

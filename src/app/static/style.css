@@ -107,13 +107,72 @@ body {
 }
 
 .status {
-    margin-top: auto;
+    margin-top: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
     color: var(--success);
     padding: 10px;
     font-size: 0.9em;
+}
+
+/* User Section Styles */
+.user-section {
+    margin-top: auto;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.btn-login,
+.btn-logout {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+}
+
+.btn-login {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-login:hover {
+    background: #2563eb;
+}
+
+.btn-logout {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.btn-logout:hover {
+    background: rgba(239, 68, 68, 0.2);
 }
 
 .status-indicator {
